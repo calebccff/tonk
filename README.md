@@ -14,7 +14,8 @@ ${execpi 300 path/to/tonk.py}
 ```ruby
 tonk.py [end]
 
-end - The final string to print, by default this is "${color white}" to reset the formatting used by the script
+end - The final string to print, by default this is "${color white}"
+to reset the formatting used by the script
 ```
 ## Notes/TODO
 
