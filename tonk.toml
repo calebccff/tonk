@@ -1,3 +1,5 @@
+# Example config file
+
 [params]
   api_key = ""
   token = ""

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import toml, argparse, os
+import toml, sys, os
 from trello import TrelloClient, exceptions
 
 FORMAT_TITLE = "${color a0d789}"
@@ -60,4 +60,8 @@ for li in config["list"]:
     for i, card in enumerate(tl.list_cards(), start=1):
         print("{}. {}".format(i, card.name))
     print()
-print(FORMAT_RESET)
+
+END = FORMAT_RESET
+if len(sys.argv) > 1:
+    END = sys.argv[1]
+print(END)
