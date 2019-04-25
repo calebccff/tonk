@@ -1,6 +1,6 @@
 # A simple script to get your TODO list from Trello in Conky
 1. Run the script, it will generate a template config file in `.config/tonk`. Edit this file to fill out the `api_key` and `token` which you can get from [Trello](https://trello.com/app-key).
-2. Fill in the board and list ID's which you can get by going to your Trello board and appending `".json"` to the end of the URL (Hit the collapse all button and looks at the `board` and `lists` attributes)
+2. Fill in the board and list ID's which you can get by going to your Trello board and appending `".json"` to the end of the URL (Hit the collapse all button and look at the `board` and `lists` attributes)
 3. Edit your `.conkyrc` to contain the following:
 ```
 ${execpi 300 path/to/tonk.py}
