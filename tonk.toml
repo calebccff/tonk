@@ -1,0 +1,17 @@
+[params]
+  api_key = ""
+  token = ""
+
+[[board]]
+  id = "beTliEaX"
+  [[list]]
+    id = ""
+  [[list]]
+    id = ""
+
+[[board]]
+  id = "beTliEaX"
+  [[list]]
+    id = ""
+  [[list]]
+    id = ""

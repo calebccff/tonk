@@ -1,26 +1,63 @@
 #!/usr/bin/env python
 
-import toml, argparse
-from trello import TrelloClient
+import toml, argparse, os
+from trello import TrelloClient, exceptions
 
-FORMAT_RESET = '${color white}'
-FORMAT_CHECKLIST = '${color 36648B}'
-FORMAT_TASK = '${color D62D20}'
-FORMAT_SUBTASK = '${color 900020}'
-FORMAT_SUBTASK_DONE = '${color BEF6C7}'
+FORMAT_TITLE = "${color a0d789}"
+FORMAT_TASK = "${color cfebc4}"
+FORMAT_RESET = "${color white}"
 
-CONFIG = "$HOME/.config/tonk"
+CONFIG_TEMPLATE = """[params]
+  api_key = ""
+  token = ""
+
+[board]
+  id = ""
+  [[list]]
+    id = ""
+  [[list]]
+    id = ""
+"""
+
+CONFIG_FILE = "{}/.config/tonk/tonk.toml".format(os.environ.get("HOME"))
+
+def load_config():
+    config = ""
+    if os.path.isfile(CONFIG_FILE):
+        config = toml.loads(open(CONFIG_FILE, "r").read())
+        return config
+    try:
+        os.makedirs(os.path.dirname(CONFIG_FILE))
+    except FileExistsError: #All the directories exist, just not the config file
+        pass
+    
+    f = open(CONFIG_FILE, "w")
+    f.write(CONFIG_TEMPLATE)
+    f.close()
+    print("Please configure this program with the config file in \n\"{}\"".format(CONFIG_FILE))
+    exit()
 
 
-parser = argparse.ArgumentParser(description='Update conky to show your TODO list')
-parser.add_argument('integers', metavar='N', type=int, nargs='+',
-                    help='an integer for the accumulator')
-parser.add_argument('-c', dest='accumulate', action='store_const',
-                    const=sum, default=max,
-                    help='sum the integers (default: find the max)')
+config = load_config()
+if not config["params"]["api_key"]:
+    api = toml.loads(open("api.toml").read())
+    config["params"]["api_key"], config["params"]["token"] = api["api_key"], api["token"]
 
-args = parser.parse_args()
-print args.accumulate(args.integers)
+client = TrelloClient(
+    api_key=config["params"]["api_key"],
+    token=config["params"]["token"]
+)
 
-if __name__ == "__main__":
-    main()
+board = config["board"]
+try:
+    tb = client.get_board(board["id"])
+except trello.exceptions.ResourceUnavailable:
+    println("ERROR: Failed GET board, check that your config file is correct")
+for li in config["list"]:
+    tl = tb.get_list(li["id"])
+    print("{}> {}".format(FORMAT_TITLE, tl.name))
+    print(FORMAT_TASK, end="")
+    for i, card in enumerate(tl.list_cards(), start=1):
+        print("{}. {}".format(i, card.name))
+    print()
+print(FORMAT_RESET)
