@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import toml, sys, os
 from trello import TrelloClient, exceptions
