@@ -25,4 +25,4 @@ to reset the formatting used by the script
 
 * Implement proper argparse
 * Support for multiple boards? Did not think it was worth implementing.
-# requirements.txt!!!!l
+* Will throw exception if api_key is not filled in and `api.toml` doesn't exist in $PWD
